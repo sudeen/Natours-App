@@ -28,7 +28,7 @@ exports.getAllTours = async (req, res) => {
       }
     });
   } catch (err) {
-    res.status(400).json({
+    res.status(404).json({
       status: 'fail',
       message: err
     });
@@ -47,7 +47,7 @@ exports.getTour = async (req, res) => {
       }
     });
   } catch (err) {
-    res.status(400).json({
+    res.status(404).json({
       status: 'fail',
       message: err
     });
@@ -65,7 +65,7 @@ exports.createTour = async (req, res) => {
       }
     });
   } catch (err) {
-    res.status(400).json({
+    res.status(404).json({
       status: 'fail',
       message: err
     });
@@ -86,7 +86,7 @@ exports.updateTour = async (req, res) => {
       }
     });
   } catch (err) {
-    res.status(400).json({
+    res.status(404).json({
       status: 'fail',
       message: 'Invalid data sent!'
     });
@@ -102,13 +102,14 @@ exports.deleteTour = async (req, res) => {
       data: null
     });
   } catch (err) {
-    res.status(400).json({
+    res.status(404).json({
       status: 'fail',
       message: 'Invalid data sent!'
     });
   }
 };
 
+// Aggergation Pipeline is used here. Matching and Grouping
 exports.getTourStats = async (req, res) => {
   try {
     // Go to mongodb documentation to look for further details
@@ -143,7 +144,60 @@ exports.getTourStats = async (req, res) => {
       }
     });
   } catch (err) {
-    res.status(400).json({
+    res.status(404).json({
+      status: 'fail',
+      message: 'Invalid data sent!'
+    });
+  }
+};
+
+// Aggergration pipeline used here. Unwinding
+exports.getMonthlyPlan = async (req, res) => {
+  try {
+    const year = req.params.year * 1; // 2021
+    const plan = await Tour.aggregate([
+      {
+        $unwind: '$startDates'
+      },
+      {
+        $match: {
+          startDates: {
+            $gte: new Date(`${year}-01-01`),
+            $lte: new Date(`${year}-12-31`)
+          }
+        }
+      },
+      {
+        $group: {
+          _id: { $month: '$startDates' },
+          numTourStarts: { $sum: 1 },
+          tours: { $push: '$name' }
+        }
+      },
+      {
+        $addFields: { month: '$_id' }
+      },
+      {
+        $project: {
+          _id: 0
+        }
+      },
+      {
+        $sort: { numTourStarts: -1 }
+      },
+      {
+        $limit: 12
+      }
+    ]);
+    res.status(200).json({
+      status: 'success',
+      results: plan.length,
+      data: {
+        plan
+      }
+    });
+  } catch (err) {
+    res.status(404).json({
       status: 'fail',
       message: 'Invalid data sent!'
     });
