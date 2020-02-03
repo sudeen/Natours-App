@@ -94,12 +94,19 @@ tourSchema.pre(/^find/, function(next) {
 
 tourSchema.post(/^find/, function(docs, next) {
   console.log(`Query took ${Date.now() - this.start} milliseconds`);
-  console.log(docs);
+  // console.log(docs);
   next();
 });
 
+// AGGREGRATION MIDDLWARE
+tourSchema.pre('aggregate', function(next) {
+  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } }); // unshift to add value to the beginning of the array
+  // console.log(this.pipeline());
+  next();
+});
 
-
+// MODEL MIDDLWARE
+// Its not that important here
 
 const Tour = mongoose.model('Tour', tourSchema);
 
