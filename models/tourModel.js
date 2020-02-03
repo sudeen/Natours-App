@@ -32,7 +32,7 @@ const tourSchema = new mongoose.Schema(
       type: Number,
       default: 4.5,
       min: [1, 'A rating must be above 1.0'],
-      max: [1, 'A rating must be below 5.0']
+      max: [5, 'A rating must be below 5.0']
     },
     ratingsQuantity: {
       type: Number,
@@ -42,7 +42,17 @@ const tourSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'A tour must have a price']
     },
-    priceDiscount: Number,
+    // priceDiscount must always be lower that the actual price
+    priceDiscount: {
+      type: Number,
+      validate: {
+        validator: function(val) {
+          // this works only on NEW document creation and will not work for update
+          return val < this.price;
+        },
+        message: 'Discount price ({VALUE}) should be less than the actual price'
+      }
+    },
     summary: {
       type: String,
       trim: true,
@@ -80,7 +90,7 @@ tourSchema.virtual('durationWeeks').get(function() {
   return this.duration / 7;
 });
 
-// DOCUMENT MIDDLEWARE: runs before .save() and .create()
+// DOCUMENT MIDDLEWARE: runs before .save() and .create() and not for update
 tourSchema.pre('save', function(next) {
   // console.log(this); // this refers to current documents being processed
   this.slug = slugify(this.name, { lower: true });
