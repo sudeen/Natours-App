@@ -4,12 +4,15 @@
   "description": "Learning Node JS, Mongo DB, and Express",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "start:prod": "(set NODE_ENV=production)  && nodemon server.js"
   },
   "author": "Sudin Ranjitkar",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "mongoose": "^5.8.11",
     "morgan": "^1.9.1"
   }
 }
