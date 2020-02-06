@@ -5,6 +5,12 @@ const handleCastErrorDB = err => {
   return new AppError(message, 400);
 };
 
+const handleJWTError = () =>
+  new AppError('Invalid token. Please Login again', 401);
+
+const handleJWTExpiredError = () =>
+  new AppError('Your token has expired! Please login again', 401);
+
 const handleDuplicateFieldDB = err => {
   const value = err.errmsg.match(/(["'])(?:(?=(\\?))\2.)*?\1/)[0];
   // const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0]; OTHER REGULAR EXPRESSION METHOD
@@ -61,6 +67,8 @@ module.exports = (err, req, res, next) => {
     if (error.code === 11000) error = handleDuplicateFieldDB(error);
     if (error.name === 'ValidationError')
       error = handleValidationErrorDB(error);
+    if (error.name === 'JsonWebTokenError') error = handleJWTError();
+    if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
     sendErrorProd(error, res);
   }
 };
