@@ -42,7 +42,12 @@ const userSchema = new mongoose.Schema({
   },
   passwordChangedAt: Date,
   passwordResetToken: String,
-  passwordResetExpires: Date
+  passwordResetExpires: Date,
+  active: {
+    type: Boolean,
+    default: true,
+    select: false
+  }
 });
 
 /* This function is used while creating user and hashing the password using bcrypt */
@@ -66,6 +71,12 @@ userSchema.pre('save', function(next) {
   /* Delaying 1 sec is just a small hack so that the passwordChangedAt doesnot occur before the reset token
   Doing this will create the token after the password has been changed */
   this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
+
+userSchema.pre(/^find/, function(next) {
+  // this point to current query
+  this.find({ active: { $ne: false } });
   next();
 });
 
