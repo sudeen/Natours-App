@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema({
   passwordResetExpires: Date
 });
 
-// This function is used while creating user and hashing the password using bcrypt
+/* This function is used while creating user and hashing the password using bcrypt */
 userSchema.pre('save', async function(next) {
   // Only run this function if password was actually modified
   if (!this.isModified('password')) return next();
@@ -58,7 +58,18 @@ userSchema.pre('save', async function(next) {
   next();
 });
 
-// Compares password
+/* This function automatically works whenever there is a modification in the password field */
+userSchema.pre('save', function(next) {
+  /* isModified and isNew can be found in the document itself */
+  if (!this.isModified('password') || this.isNew) return next();
+
+  /* Delaying 1 sec is just a small hack so that the passwordChangedAt doesnot occur before the reset token
+  Doing this will create the token after the password has been changed */
+  this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
+
+/* Compares password */
 userSchema.methods.correctPassword = async function(
   candidatePassword,
   userPassword
@@ -66,7 +77,7 @@ userSchema.methods.correctPassword = async function(
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
-// This section is used when user changes password and the password change date timestamp is compared
+/* This section is used when user changes password and the password change date timestamp is compared */
 userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
   if (this.passwordChangedAt) {
     const changedTimestamp = parseInt(
@@ -81,6 +92,7 @@ userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
   return false;
 };
 
+/* Creates password reset token for forget password */
 userSchema.methods.createPasswordResetToken = function() {
   const resetToken = crypto.randomBytes(32).toString('hex');
 
