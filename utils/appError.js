@@ -1,3 +1,4 @@
+/* This class is used to send error message globally */
 class AppError extends Error {
   constructor(message, statusCode) {
     super(message);

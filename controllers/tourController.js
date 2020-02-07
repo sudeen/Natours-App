@@ -10,7 +10,7 @@ exports.ailasTopTours = (req, res, next) => {
   next();
 };
 
-// GET ALL TOURS
+/* GET ALL TOURS */
 exports.getAllTours = catchAsync(async (req, res, next) => {
   //EXECUTE QUERY
   const features = new APIFeatures(Tour.find(), req.query)
@@ -30,7 +30,7 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
   });
 });
 
-// GET SINGLE TOUR
+/* GET SINGLE TOUR */
 exports.getTour = catchAsync(async (req, res, next) => {
   const tour = await Tour.findById(req.params.id);
   // Tour.findOne({_id: req.params.id})
@@ -45,7 +45,7 @@ exports.getTour = catchAsync(async (req, res, next) => {
   });
 });
 
-// CREATE TOUR
+/* CREATE TOUR */
 exports.createTour = catchAsync(async (req, res, next) => {
   const newTours = await Tour.create(req.body);
   res.status(201).json({
@@ -56,7 +56,7 @@ exports.createTour = catchAsync(async (req, res, next) => {
   });
 });
 
-// UPDATE TOUR
+/* UPDATE TOUR */
 exports.updateTour = catchAsync(async (req, res, next) => {
   const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
@@ -73,7 +73,7 @@ exports.updateTour = catchAsync(async (req, res, next) => {
   });
 });
 
-// DELETE TOUR
+/* DELETE TOUR */
 exports.deleteTour = catchAsync(async (req, res, next) => {
   const tour = await Tour.findByIdAndDelete(req.params.id);
   if (!tour) {
@@ -85,9 +85,9 @@ exports.deleteTour = catchAsync(async (req, res, next) => {
   });
 });
 
-// Aggergation Pipeline is used here. Matching and Grouping
+/* Aggergation Pipeline is used here. Matching and Grouping */
 exports.getTourStats = catchAsync(async (req, res, next) => {
-  // Go to mongodb documentation to look for further details
+  /* Go to mongodb documentation to look for further details */
   const stats = await Tour.aggregate([
     {
       $match: {
@@ -126,10 +126,10 @@ exports.getTourStats = catchAsync(async (req, res, next) => {
         avgPrice: 1
       }
     }
-    // Can be matched twice but not useful in most of the cases
-    // {
-    //   $match: { _id: { $ne: 'EASY' } }
-    // }
+    /* Can be matched twice but not useful in most of the cases
+     {
+     $match: { _id: { $ne: 'EASY' } }
+    } */
   ]);
 
   res.status(200).json({
@@ -140,7 +140,7 @@ exports.getTourStats = catchAsync(async (req, res, next) => {
   });
 });
 
-// Aggergration pipeline used here. Unwinding
+/* Aggergration pipeline used here. Unwinding */
 exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
   const year = req.params.year * 1; // 2021
   const plan = await Tour.aggregate([

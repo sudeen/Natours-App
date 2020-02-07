@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
-// Handling uncaught exceptions. This should be on top before any thing starts
+/* Handling uncaught exceptions. This should be on top before any thing starts */
 process.on('uncaughtException', err => {
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
   console.log(err.name, err.message);
@@ -31,7 +31,7 @@ const server = app.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });
 
-// Handles unhandled rejections like when connection to mongodb is unsuccessful
+/* Handles unhandled rejections like when connection to mongodb is unsuccessful */
 process.on('unhandledRejection', err => {
   console.log('UNHANDLED REJECTION! 💥 Shutting down...');
   console.log(err.name, err.message);

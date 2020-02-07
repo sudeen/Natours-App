@@ -1,3 +1,5 @@
+/* This section is basically used to send mails for the password reset token.
+mailtrap.io is used to get the token for resetting the password */
 const nodemailer = require('nodemailer');
 
 const sendEmail = async options => {
@@ -13,7 +15,7 @@ const sendEmail = async options => {
 
   // 2) Define the email options
   const mailOptions = {
-    from: 'Jonas Schmedtmann <hello@jonas.io>',
+    from: 'Sudin Ranjitkar <hello@sudin.io>',
     to: options.email,
     subject: options.subject,
     text: options.message

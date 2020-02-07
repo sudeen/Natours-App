@@ -8,7 +8,7 @@ const userRouter = require('./routes/userRoutes');
 
 const app = express();
 
-// MIDDLEWARES
+/* MIDDLEWARES */
 // console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev')); // To get log in the console
@@ -25,12 +25,12 @@ app.use((req, res, next) => {
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 
-// Handling 404 errors
+/* Handling 404 errors */
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
 });
 
-// Global Error Handling middleware
+/* Global Error Handling middleware */
 app.use(globalErrorHandler);
 
 module.exports = app;

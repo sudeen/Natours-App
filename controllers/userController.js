@@ -35,6 +35,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   });
 });
 
+/* Update the logged in user */
 exports.updateMe = catchAsync(async (req, res, next) => {
   // 1) Create error if user POSTs password data
   if (req.body.password || req.body.passwordConfirm) {
@@ -63,6 +64,8 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
+/* Delete the user. Not completely deleting from the database but setting the active status to false.
+As someday the usee might signup again and we can use that data again */
 exports.deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
   res.status(204).json({
