@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+// const User = require('./userModel');
 // const validator = require('validator');
 
 const tourSchema = new mongoose.Schema(
@@ -102,7 +103,8 @@ const tourSchema = new mongoose.Schema(
         description: String,
         day: Number
       }
-    ]
+    ],
+    guides: [{ type: mongoose.Schema.ObjectId, ref: 'User' }]
   },
   {
     toJSON: { virtuals: true },
@@ -110,29 +112,46 @@ const tourSchema = new mongoose.Schema(
   }
 );
 
-// Virtual data cannot be used for query as this property is not part of database
+/* Virtual data cannot be used for query as this property is not part of database */
 tourSchema.virtual('durationWeeks').get(function() {
   // similar to getter
   return this.duration / 7;
 });
 
-// DOCUMENT MIDDLEWARE: runs before .save() and .create() and not for update
+/* DOCUMENT MIDDLEWARE: runs before .save() and .create() and not for update */
 tourSchema.pre('save', function(next) {
   // console.log(this); // this refers to current documents being processed
   this.slug = slugify(this.name, { lower: true });
   next();
 });
 
+/* Used to embed documents in the model.
+Responsible for embedding documents */
+// tourSchema.pre('save', async function(next) {
+//   const guidesPromises = this.guides.map(async id => await User.findById(id));
+//   // The result gonna have array full of promises in each async id element so we need to use async
+//   this.guides = await Promise.all(guidesPromises);
+//   next();
+// });
+
 // tourSchema.post('save', function(doc, next) {
 //   console.log(doc);
 //   next();
 // });
 
-// QUERY MIDDLEWARE
+/* QUERY MIDDLEWARE */
 tourSchema.pre(/^find/, function(next) {
   // Regular expression where it find all the methods that starts with find
   this.find({ secretTour: { $ne: true } });
   this.start = Date.now();
+  next();
+});
+
+tourSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangedAt'
+  });
   next();
 });
 
@@ -142,7 +161,7 @@ tourSchema.post(/^find/, function(docs, next) {
   next();
 });
 
-// AGGREGRATION MIDDLWARE
+/* AGGREGRATION MIDDLWARE */
 tourSchema.pre('aggregate', function(next) {
   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } }); // unshift to add value to the beginning of the array
   // console.log(this.pipeline());
