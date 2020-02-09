@@ -1,3 +1,4 @@
+/* Used to either delete all the data in the database or import all the data from the json file to database */
 const fs = require('fs');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
