@@ -2,7 +2,8 @@ const express = require('express');
 const reviewController = require('../controllers/reviewController');
 const authController = require('../controllers/authController');
 
-const router = express.Router();
+/* mergeParams helps to get params tourId in the reviewRoute */
+const router = express.Router({ mergeParams: true });
 
 router
   .route('/')
