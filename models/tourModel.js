@@ -123,6 +123,11 @@ const tourSchema = new mongoose.Schema(
   }
 );
 
+/* Creating our own index. Here 1 means in ascending order and -1 means descending */
+// tourSchema.index({ price: 1 });
+tourSchema.index({ price: 1, ratingsAverage: -1 });
+tourSchema.index({ slug: 1 });
+
 /* Virtual data cannot be used for query as this property is not part of database */
 tourSchema.virtual('durationWeeks').get(function() {
   // similar to getter
