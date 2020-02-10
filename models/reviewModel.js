@@ -34,11 +34,21 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
+/* Populate tour and user in the reviews */
+// reviewSchema.pre(/^find/, function(next) {
+//   this.populate({
+//     path: 'tour',
+//     select: 'name'
+//   }).populate({
+//     path: 'user',
+//     select: 'name photo'
+//   });
+//   next();
+// });
+
+/* Populate user in the reviews */
 reviewSchema.pre(/^find/, function(next) {
   this.populate({
-    path: 'tour',
-    select: 'name'
-  }).populate({
     path: 'user',
     select: 'name photo'
   });

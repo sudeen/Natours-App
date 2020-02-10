@@ -104,7 +104,18 @@ const tourSchema = new mongoose.Schema(
         day: Number
       }
     ],
-    guides: [{ type: mongoose.Schema.ObjectId, ref: 'User' }]
+    guides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+      }
+    ]
+    // reviews: [
+    //   {
+    //     type: mongoose.Schema.ObjectId,
+    //     ref: 'Review'
+    //   }
+    // ]
   },
   {
     toJSON: { virtuals: true },
@@ -116,6 +127,14 @@ const tourSchema = new mongoose.Schema(
 tourSchema.virtual('durationWeeks').get(function() {
   // similar to getter
   return this.duration / 7;
+});
+
+/* Virtual Populate.
+This happens without persisting the database */
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id'
 });
 
 /* DOCUMENT MIDDLEWARE: runs before .save() and .create() and not for update */
