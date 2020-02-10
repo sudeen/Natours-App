@@ -23,6 +23,11 @@ exports.checkID = (req, res, next, val) => {
   next();
 };
 
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
+};
+
 /* Update the logged in user */
 exports.updateMe = catchAsync(async (req, res, next) => {
   // 1) Create error if user POSTs password data
