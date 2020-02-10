@@ -1,7 +1,5 @@
 const Tour = require('../models/tourModel');
-const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/appError');
 const factory = require('./handlerFactory');
 
 exports.ailasTopTours = (req, res, next) => {
@@ -12,39 +10,10 @@ exports.ailasTopTours = (req, res, next) => {
 };
 
 /* GET ALL TOURS */
-exports.getAllTours = catchAsync(async (req, res, next) => {
-  //EXECUTE QUERY
-  const features = new APIFeatures(Tour.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-  const tours = await features.query;
-
-  // SEND RESPONSE
-  res.status(200).json({
-    status: 'success',
-    results: tours.length,
-    data: {
-      tours
-    }
-  });
-});
+exports.getAllTours = factory.getAll(Tour);
 
 /* GET SINGLE TOUR */
-exports.getTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id).populate('reviews');
-  // Tour.findOne({_id: req.params.id})
-  if (!tour) {
-    return next(new AppError('No Tour found with that ID', 404));
-  }
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour
-    }
-  });
-});
+exports.getTour = factory.getOne(Tour, { path: 'reviews' }); // path options is the one we want to populate.
 
 /* CREATE TOUR */
 exports.createTour = factory.createOne(Tour);
@@ -54,6 +23,8 @@ exports.updateTour = factory.updateOne(Tour);
 
 /* DELETE TOUR */
 exports.deleteTour = factory.deleteOne(Tour);
+
+/* Previously Used code when handlerFactory.js was not created */
 // exports.deleteTour = catchAsync(async (req, res, next) => {
 //   const tour = await Tour.findByIdAndDelete(req.params.id);
 //   if (!tour) {
