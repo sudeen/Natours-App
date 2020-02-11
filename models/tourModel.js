@@ -183,11 +183,11 @@ tourSchema.post(/^find/, function(docs, next) {
 });
 
 /* AGGREGRATION MIDDLWARE */
-tourSchema.pre('aggregate', function(next) {
-  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } }); // unshift to add value to the beginning of the array
-  // console.log(this.pipeline());
-  next();
-});
+// tourSchema.pre('aggregate', function(next) {
+//   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } }); // unshift to add value to the beginning of the array
+//   // console.log(this.pipeline());
+//   next();
+// });
 
 // MODEL MIDDLWARE
 // Its not that important here
