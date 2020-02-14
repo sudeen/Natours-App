@@ -6,6 +6,8 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -44,7 +46,11 @@ const limiter = rateLimit({
 app.use('/api', limiter); // Applies the rate limit to the APIs starting from '/api
 
 /* Body parser, reading data from the body into req.body */
+// use cors before all route definitions
+app.use(cors({origin: 'http://localhost:3000'}));
+// app.use(cors({ origin: 'http://127.0.0.1:3000', credentials: 'true' }));
 app.use(express.json({ limit: '10kb' })); // If body is larger than 10kb it will not accept it
+app.use(cookieParser());
 
 /* Data Sanitization against NoSQL query injection.
 If we use {"$gt": """} we will be able to login as admin */
@@ -70,7 +76,7 @@ app.use(
 /* Test middlewares */
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  // console.log(req.headers);
+  console.log(req.cookies);
   next();
 });
 
