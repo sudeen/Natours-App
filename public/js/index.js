@@ -1,10 +1,11 @@
 import '@babel/polyfill'; // This helps to work some of the newer javascript function to work in older browsers
 import { displayMap } from './mapbox';
-import { login } from './login';
+import { login, logout } from './login';
 
 // DOM ELEMENTS
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.form');
+const logOutBtn = document.querySelector('.nav__el--logout');
 
 // DELEGATION
 if (mapBox) {
@@ -19,3 +20,5 @@ if (loginForm)
     const password = document.getElementById('password').value;
     login(email, password);
   });
+
+if (logOutBtn) logOutBtn.addEventListener('click', logout);
