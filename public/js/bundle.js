@@ -8351,7 +8351,7 @@ function () {
             // if (res.data.message === 'success') location.reload(true);
             console.log('res.data.message ', res.data.message);
             console.log('res.data.status ', res.data.status);
-            if (res.data.message === 'success') location.reload(true);
+            if (res.data.status === 'success') location.reload(true);
             _context2.next = 13;
             break;
 
@@ -8688,7 +8688,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63240" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51245" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -37,7 +37,7 @@ export const logout = async () => {
     // if (res.data.message === 'success') location.reload(true);
     console.log('res.data.message ', res.data.message);
     console.log('res.data.status ', res.data.status);
-    if (res.data.message === 'success') location.reload(true);
+    if (res.data.status === 'success') location.reload(true);
   } catch (err) {
     console.log(err.response);
     showAlert('error', 'Error logging out! Try again.');
