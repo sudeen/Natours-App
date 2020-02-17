@@ -86,7 +86,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
-  } else if (req.cookies.jwt) {
+    } else if (req.cookies.jwt) {
+  // } else if (req.cookies.jwt && req.cookies.jwt !== 'loggedout') {
     token = req.cookies.jwt;
   }
 
@@ -247,9 +248,12 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.user.id).select('+password');
 
   // 2) Check if the posted password is correct
-  if (await !user.correctPassword(req.body.passwordCurrent, user.password)) {
-    return next(new AppError('Your current password is wrong', 401));
+  if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
+    return next(new AppError('Your current password is wrong.', 401));
   }
+  // if (await !user.correctPassword(req.body.passwordCurrent, user.password)) {
+  //   return next(new AppError('Your current password is wrong', 401));
+  // }
 
   // 3) If so, update the password
   user.password = req.body.password;
