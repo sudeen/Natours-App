@@ -47,10 +47,11 @@ app.use('/api', limiter); // Applies the rate limit to the APIs starting from '/
 
 /* Body parser, reading data from the body into req.body */
 // use cors before all route definitions
-app.use(cors({origin: 'http://localhost:3000'}));
+app.use(cors({ origin: 'http://localhost:3000' }));
 // app.use(cors({ origin: 'http://127.0.0.1:3000', credentials: 'true' }));
 app.use(express.json({ limit: '10kb' })); // If body is larger than 10kb it will not accept it
 app.use(cookieParser());
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 /* Data Sanitization against NoSQL query injection.
 If we use {"$gt": """} we will be able to login as admin */
