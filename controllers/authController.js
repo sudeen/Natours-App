@@ -119,6 +119,8 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser; // This part is crucial for the if step (req.user.role) to work
+  // THERE IS A LOGGED IN USER
+  res.locals.user = currentUser;
   next();
 });
 
