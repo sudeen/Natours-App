@@ -22,7 +22,11 @@ router.patch(
 
 router.get('/me', userController.getMe, userController.getUser);
 router.delete('/deleteMe', userController.deleteMe);
-router.patch('/updateMe', userController.updateMe);
+router.patch(
+  '/updateMe',
+  userController.uploadUserPhoto,
+  userController.updateMe
+);
 
 /* All other routes after this middleware are restricted for others except admins */
 router.use(authController.restrictTo('admin'));
