@@ -52,6 +52,7 @@ const userSchema = new mongoose.Schema({
 });
 
 /* This function is used while creating user and hashing the password using bcrypt */
+/* This part needs to be commented while importing data from the json file */
 userSchema.pre('save', async function(next) {
   // Only run this function if password was actually modified
   if (!this.isModified('password')) return next();
