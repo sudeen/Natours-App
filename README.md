@@ -1,6 +1,6 @@
-# Dillinger
+# Natours
 
-Natours is a cloud-enabled, ReactJS powered by NodeJS application for booking the Tour.
+Natours is a cloud-enabled, hosted database, ReactJS powered by NodeJS application for booking the Tour.
 
 - View all the available tours
 - Login using common password "test1234"

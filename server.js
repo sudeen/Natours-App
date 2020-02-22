@@ -42,3 +42,11 @@ process.on('unhandledRejection', err => {
 
 // Examples of uncaught exception
 // console.log(x);
+
+/* SIGTERM is a signal that is used to cause a program stop running which HEROKU does internally */
+process.on('SIGTERM', () => {
+  console.log('✋ SIGTERM RECEIVED. Shutting down gracefully');
+  server.close(() => {
+    console.log('💥 Process terminated!');
+  });
+});
