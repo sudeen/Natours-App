@@ -176,11 +176,12 @@ tourSchema.pre(/^find/, function(next) {
   next();
 });
 
-tourSchema.post(/^find/, function(docs, next) {
-  console.log(`Query took ${Date.now() - this.start} milliseconds`);
-  // console.log(docs);
-  next();
-});
+/* Used only for testing post find middleware */
+// tourSchema.post(/^find/, function(docs, next) {
+//   console.log(`Query took ${Date.now() - this.start} milliseconds`);
+//   // console.log(docs);
+//   next();
+// });
 
 /* AGGREGRATION MIDDLWARE */
 // tourSchema.pre('aggregate', function(next) {
