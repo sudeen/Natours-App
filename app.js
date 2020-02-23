@@ -27,6 +27,14 @@ app.set('views', path.join(__dirname, 'views'));
 
 /* GLOBAL MIDDLEWARES */
 
+/* Implement CORS */
+// use cors before all route definitions
+app.use(cors());
+// app.use(cors({ origin: 'http://127.0.0.1:3000', credentials: 'true' }));
+
+// To allow complex requests like PUT, PATCH, DELETE
+app.options('*', cors());
+
 /* Serving static files */
 // app.use(express.static(`${__dirname}/public`));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -50,9 +58,6 @@ const limiter = rateLimit({
 app.use('/api', limiter); // Applies the rate limit to the APIs starting from '/api
 
 /* Body parser, reading data from the body into req.body */
-// use cors before all route definitions
-app.use(cors({ origin: 'http://localhost:3000' }));
-// app.use(cors({ origin: 'http://127.0.0.1:3000', credentials: 'true' }));
 app.use(express.json({ limit: '10kb' })); // If body is larger than 10kb it will not accept it
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
