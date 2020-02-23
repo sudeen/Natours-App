@@ -94,7 +94,8 @@ app.use(
   })
 );
 
-/* Compresses all the text that are sent to clients. Not works for images. */
+/* Compresses all the text that are sent to clients. Not works for images.
+Use this link https://www.giftofspeed.com/gzip-test/ to check  */
 app.use(compression());
 
 /* Test middlewares */
